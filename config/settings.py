@@ -1,26 +1,45 @@
+import os
+
 from dataclasses import dataclass
+from dotenv import load_dotenv
+
+
+load_dotenv()
 
 
 @dataclass
 class BotSettings:
-    # Job matching
+    app_env: str = os.getenv("APP_ENV", "development")
+
+    database_url: str = os.getenv(
+        "DATABASE_URL",
+        "postgresql://localhost:5432/job_applicator",
+    )
+
+    log_level: str = os.getenv("LOG_LEVEL", "INFO")
+
+    linkedin_enabled: bool = (
+        os.getenv("LINKEDIN_ENABLED", "true").lower() == "true"
+    )
+
+    naukri_enabled: bool = (
+        os.getenv("NAUKRI_ENABLED", "true").lower() == "true"
+    )
+
     minimum_match_score: int = 70
 
-    # Application control
     max_applications_per_day: int = 10
 
-    # Search control
     max_jobs_per_search: int = 50
 
-    # Browser
     headless_browser: bool = False
 
-    # Manual intervention
     pause_on_captcha: bool = True
+
     pause_on_otp: bool = True
+
     pause_on_unknown_form: bool = True
 
-    # Duplicate handling
     skip_already_processed_jobs: bool = True
 
 
